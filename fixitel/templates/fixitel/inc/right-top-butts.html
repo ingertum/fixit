@@ -1,0 +1,6 @@
+<div class="col-md-6 col-sm-12 text-right mt-3 mt-md-0 rightmasterbuttons">
+    {% if isAdmin %}
+    <a href="{% url 'ticket_add' %}" class="btn btn-sm btn-primary" title="">Создать заявку</a>
+    <a href="{% url 'master_add' %}" class="btn btn-sm btn-secondary" title="">Добавить мастера</a>
+    {% endif %}
+</div>

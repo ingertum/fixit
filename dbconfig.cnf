@@ -1,0 +1,5 @@
+[client]
+database = ct95000_fixserv
+user = ct95000_fixserv
+password = ClaudiaKim33
+default-character-set = utf8

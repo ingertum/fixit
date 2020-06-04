@@ -1,0 +1,116 @@
+{% extends  'base.html' %}
+{% load static %}
+{% block content %}
+
+
+    <div id="main-content">
+        <div class="container-fluid">
+
+            <div class="block-header">
+                <div class="row clearfix">
+                    <div class="col-md-6 col-sm-12">
+                        <h1>Список мастеров</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'main' %}">Панель Управления</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Список мастеров</li>
+                            </ol>
+                        </nav>
+                    </div>            
+                    
+                    {% include 'fixitel/inc/right-top-butts.html' %}
+
+                </div>
+            </div>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert {{ message.tags }}"{% endif %} role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+
+
+            <!-- ==== Список мастеров ==== -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12">
+
+                    <div class="font-20 mt-3 mb-1"><strong>Мастера ({{ profilesCount }} чел.)</strong></div>
+
+                    <div class="table-responsive">
+                        <style>
+                            .myTicketTable{
+                                min-width: 800px;
+                            }
+                            .myTicketTable tr td{
+                                max-width: 0;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                            }
+                            .myTicketTable__desct{
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                            }
+                            .last-th{
+                                min-width: 290px;
+                            }
+
+                        </style>
+                        <table class="myTicketTable table table-hover table-custom spacing8" id="myTicketTable">
+                            <thead>
+                                <tr> 
+                                    <th width="25%">Ф.И.О</th>
+                                    <th width="25%">Должность<br>(Роль в системе)</th>
+                                    <th width="25%">Информация</th>
+                                    <th width="25%" class="last-th">Управление</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for profile in profiles %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'master_edit' pk=profile.id %}" title="">
+                                            {{ profile.user.first_name }}
+                                            {{ profile.user.last_name }}
+                                        </a>
+                                    </td>
+                                    <td>    
+                                        <p class="mb-0 myTicketTable__desct">
+                                            {{ profile.specialty.name }}<br>
+                                            ({{ profile.user.groups.all.0 }})<br>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        Заявок в работе: <strong>{{profile.masters.count}} шт </strong>
+                                        <br>
+                                        Денег на счету: <strong>{{ profile.cash }} Р </strong>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{% url 'master_edit' pk=profile.id %}" class="btn btn-sm btn-primary">
+                                            <i class="fa fa-pencil mr-1"></i> Редактировать
+                                        </a>
+                                        <a href="/admin/fixitel/profile/1/delete/" target="_blank" class="btn btn-sm btn btn-danger ml-2">
+                                            <i class="fa fa-times mr-1"></i> Удалить
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+            
+                </div>
+            </div>
+            <!-- ==== Конец Свежие заявки ==== -->
+
+
+
+
+
+
+        </div>
+    </div>
+
+{% endblock %}

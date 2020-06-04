@@ -1,0 +1,25 @@
+{% extends  'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Войди в свой аккаунт</h4>
+        <p>Введите данные:</p>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="/me/">
+            
+            {% for field in form %}
+            <div class="fieldWrapper">
+                {{ field.errors }}
+                {{ field.label_tag }} {{ field }}
+                {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

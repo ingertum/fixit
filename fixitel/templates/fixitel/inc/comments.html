@@ -1,0 +1,63 @@
+{% load widget_tweaks %}
+<!-- ==== Новые комментарии ==== -->
+<div class="row clearfix mb-5">
+    <div class="col-lg-12 col-md-12">
+
+        <div class="h4 mt-3 mb-3" id="commentBlock">{{ comment_h1|default:"Комментарии" }}</div>
+
+        
+        <ul class="list-group">
+            {% for comment in comments %}
+            <li class="list-group-item">
+                <div class="h6 mb-1 mt-1"><strong>{{comment.autor}}</strong></div>
+                <div class="mb-2" style="font-size: 11px;">
+                    {{comment.updated}}
+
+                    {% url 'ticket_view' pk=comment.Ticket.id as ticketUrl %}
+
+                    {% if ticketUrl %}
+                        <a href="{{ ticketUrl }}" class="ml-2"><i class="fa fa-external-link"></i> К заявке</a>
+
+                        {% if comment.autor.id == profile.id %}
+                        <a href="{% url 'delete_comment' pk=comment.id %}" class="ml-2"><i class="fa fa-times"></i> Удалить</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <p class="mb-0">{{comment.body}}</p>
+            </li>
+            {% empty %}
+            <p>Нет комментариев</p>
+            {% endfor %}
+        </ul>
+
+
+        {% if needForm %}
+            <style>
+                .commentForm textarea{
+                    height: 100px;
+                }
+            </style>
+            <div class="h4 pt-5 mb-3">Добавить комментарий</div>
+            <div class="card">
+                <form method="POST" action="{% url 'ticket_comment' pk=id %}#commentBlock" class="body commentForm">{% csrf_token %}
+                    {% for field in commentform %}
+                        <div class="form-group mb-4">
+                            <label for="{{ field.id_for_label }}" class="control-label">
+                                <b>{{ field.label }}</b>
+                            </label>
+                            {% render_field field placeholder=field.label class="form-control" %}
+                            {{ field.errors }}
+                        </div>
+                    {% endfor %}
+                    <div class="pt-3">
+                        <button type="submit" class="btn btn-lg btn-success pr-4">
+                            <i class="fa fa-check mr-1"></i>
+                            <span>Комментировать</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<!-- ==== Конец Новые комментарии ==== -->

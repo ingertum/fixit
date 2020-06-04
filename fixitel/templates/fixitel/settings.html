@@ -1,0 +1,53 @@
+{% extends  'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <div id="main-content">
+        <div class="container-fluid">
+
+            <div class="block-header">
+                <div class="row clearfix">
+                    <div class="col-md-6 col-sm-12">
+                        <h1>{{ pagetitle }}</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'main' %}">Панель Управления</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ pagetitle }}</li>
+                            </ol>
+                        </nav>
+                    </div>            
+                    <div class="col-md-6 col-sm-12 text-right mt-3 mt-md-0">
+                        <a href="{% url 'main' %}" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-mail-reply mr-1"></i>
+                            <span>Назад</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert {{ message.tags }}"{% endif %} role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+
+
+
+            {% if isAdmin %}
+            <div class="h4 mt-3 mb-4">Панель администратора</div>
+            <a href="/admin/" target="_blank" class="btn btn-info btn-round mb-5">Вход в панель администратора</a>
+            {% endif %}
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+{% endblock %}

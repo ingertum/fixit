@@ -1,0 +1,138 @@
+{% extends  'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <div id="main-content">
+        <div class="container-fluid">
+
+            <div class="block-header">
+                <div class="row clearfix">
+                    <div class="col-md-6 col-sm-12">
+                        <h1>{{ pagetitle }}</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'main' %}">Панель Управления</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ pagetitle }}</li>
+                            </ol>
+                        </nav>
+                    </div>            
+                    <div class="col-md-6 col-sm-12 text-right mt-3 mt-md-0">
+                        <a href="{% url 'main' %}" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-mail-reply mr-1"></i>
+                            <span>Назад</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert {{ message.tags }}"{% endif %} role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+
+
+            {% if isAdmin %}
+            <div class="h4 mt-3">Доходы мастеров</div>
+
+            <div class="card">
+                <div class="header">
+                    <h2>Управление счетами мастеров</h2>
+                    <ul class="header-dropdown dropdown">
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                            <ul class="dropdown-menu vivify fadeIn" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 36px, 0px);">
+                                <li><a href="javascript:void(0);">Action</a></li>
+                                <li><a href="javascript:void(0);">Another Action</a></li>
+                                <li><a href="javascript:void(0);">Something else</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover js-basic-example dataTable table-custom spacing5 mb-0">
+                        <thead>
+                            <tr>
+                                <th>Логин</th>
+                                <th>Мастер</th>
+                                <th>Текущий счёт (Р)</th>
+                                <th  class="text-right">Управление</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for profile in all_profiles %}
+                            <tr>
+                                <td>
+                                    {{ profile.user.username }}
+                                </td>
+                                <td>
+                                    <div class="font-15">
+                                        {{ profile.user.first_name }}
+                                        {{ profile.user.last_name }}
+                                    </div>
+                                    <span class="text-muted">{{ profile.user.email }}</span>
+                                </td>
+                                <td><strong>{{ profile.cash }} Р </strong></td>
+                                <td class="text-right">
+                                    <a href="{% url 'master_edit' pk=profile.id %}" class="btn btn-info btn-round">Редактировать</a>
+                                    <a href="{% url 'master_zero' pk=profile.id %}" class="btn btn-danger btn-round">Обнулить счёт</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row clearfix">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <div class="body">
+                            <div>Всего к выплате</div>
+                            <div class="py-4 m-0 text-center h1 text-info">{{ total_money | default:"0"}} Р</div>
+                            <div class="d-flex">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="h4 mt-3 mb-4">Управление статусами заявок</div>
+
+            <a href="/admin/fixitel/status/" target="_blank" class="btn btn-info btn-round mb-5">Статусы заявок (админка)</a>
+
+            {% else %}
+
+            <div class="row clearfix">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <div class="body">
+                            <div>У вас на счету</div>
+                            <div class="py-4 m-0 text-center h1 text-info">{{ total_money | default:"0"}} Р</div>
+                            <div class="d-flex">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            {% endif %}
+
+
+
+
+
+        </div>
+    </div>
+
+{% endblock %}

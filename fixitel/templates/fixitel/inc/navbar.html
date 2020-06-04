@@ -1,0 +1,103 @@
+{% load static %}
+
+<nav class="navbar top-navbar">
+    <div class="container-fluid">
+
+        <div class="navbar-left">
+            <div class="navbar-btn">
+                <a href="{% url 'main' %}"><img src="{% static 'assets/images/icon.svg' %}" alt="" class="img-fluid logo"></a>
+                <button type="button" class="btn-toggle-offcanvas"><i class="lnr lnr-menu fa fa-bars"></i></button>
+            </div>
+        </div>
+
+        <div class="navbar-right">
+            <div id="navbar-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="/logout/" class="icon-menu d-flex align-items-center"><i class="icon-power"></i> <span class="d-inline-block pl-2">Выйти</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="progress-container">
+        <div class="progress-bar" id="myBar"></div>
+    </div>
+</nav>
+
+
+<div id="left-sidebar" class="sidebar">
+    <div class="navbar-brand">
+        <a href="{% url 'main' %}"><img src="{% static 'assets/images/icon.svg' %}" alt="Oculux Logo"
+                class="img-fluid logo"><span>FIXITEL</span></a>
+        <button type="button" class="btn-toggle-offcanvas btn btn-sm float-right"><i
+                class="lnr lnr-menu icon-close"></i></button>
+    </div>
+    <div class="sidebar-scroll">
+        <div class="user-account">
+            <!-- <div class="user_div">
+                <img src="{% static 'assets/images/user.png' %}" class="user-photo" alt="User Profile Picture">
+            </div> -->
+            <div class="dropdown">
+                <a href="javascript:void(0);" class="user-name"><strong>{{ profile.user.first_name }} {{ profile.user.last_name }}</strong></a>
+                <span>{{ profile.specialty }}</span><br>
+                <span>Денег на счету <strong>{{ profile.cash }} Р.</strong></span>
+            </div>
+        </div>
+        <nav id="left-sidebar-nav" class="sidebar-nav">
+            <ul id="main-menu" class="metismenu">
+                <li class="header">Разделы</li>
+                <li class="{% if request.path == '/' %}active{% endif %}">
+                    <a href="{% url 'main' %}">
+                        <i class="icon-speedometer"></i><span>Панель управления</span>
+                    </a>
+                </li>
+                <li class="{% if request.path == '/tickets/' or request.path == '/tickets/archive/' %}active{% endif %}">
+                    <a href="{% url 'ticket_list' %}" class="has-arrow"><i class="icon-home"></i><span>Заявки</span></a>
+
+                    {% if isAdmin and request.path == '/tickets/' %}
+                    <ul>
+                        <li class="active">
+                            <a href="{% url 'ticket_list' %}">Активные</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'ticket_archive' %}">Выполненные</a>
+                        </li>
+                    </ul>
+                    {% endif %}
+
+                    {% if isAdmin and request.path == '/tickets/archive/' %}
+                    <ul>
+                        <li>
+                            <a href="{% url 'ticket_list' %}">Активные</a>
+                        </li>
+                        <li class="active">
+                            <a href="{% url 'ticket_archive' %}">Выполненные</a>
+                        </li>
+                    </ul>
+                    {% endif %}
+                </li>
+                {% if isAdmin %}
+                <li class="{% if request.path == '/masters/' %}active{% endif %}">
+                    <a href="{% url 'master_list' %}">
+                        <i class="icon-users"></i><span>Сотрудники</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="header">Финансы</li>
+                <li class="{% if request.resolver_match.url_name == 'finance_main' %}active{% endif %}">
+                    <a href="{% url 'finance_main' %}">
+                        <i class="icon-diamond"></i><span>Доходы сотрудников</span>
+                    </a>
+                </li>
+                <li class="{% if request.resolver_match.url_name == 'score_main' or request.resolver_match.url_name == 'score_plus' or request.resolver_match.url_name == 'score_minus' %}active{% endif %}">
+                    <a href="{% url 'score_main' %}">
+                        <i class="icon-refresh"></i><span>Фин.операции</span>
+                    </a>
+                </li>
+                <li class="{% if request.path == '/settings/' %}active{% endif %}">
+                    <a href="{% url 'settings' %}"><i class="icon-settings"></i><span>Настройки</span></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

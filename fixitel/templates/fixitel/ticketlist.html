@@ -1,0 +1,124 @@
+{% extends  'base.html' %}
+{% load static %}
+{% block content %}
+
+
+    <div id="main-content">
+        <div class="container-fluid">
+
+            <div class="block-header">
+                <div class="row clearfix">
+                    <div class="col-md-6 col-sm-12">
+                        <h1>Список заявок</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'main' %}">Панель Управления</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Список заявок</li>
+                            </ol>
+                        </nav>
+                    </div>            
+                    {% include 'fixitel/inc/right-top-butts.html' %}
+                </div>
+            </div>
+
+
+            
+            {% if messages %}
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert {{ message.tags }}"{% endif %} role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+        
+
+
+
+            <!-- ==== Свежие заявки ==== -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12">
+
+                    <div class="font-20 mt-3 mb-1"><strong>Активные заявки ({{ ticketsCount }} шт.)</strong></div>
+
+                    <div class="table-responsive">
+                        <table class="myTicketTable table table-hover table-custom spacing8">
+                            <thead>
+                                <tr> 
+                                    <th width="15%">Название</th>
+                                    <th width="30%">Описание</th>
+                                    <th width="15%">Мастер</th>
+                                    <th width="15%">Статус</th>
+                                    <th width="10%">Стоимость</th>
+                                    <th width="10%">Управление</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for post in tickets %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'ticket_view' pk=post.id %}" title="">{{ post.title }}</a>
+                                        <p class="mb-0 font-12">{{ post.updated }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0"><small><i class="fa fa-compass mr-1"></i> 
+                                            {% if post.clientAdress %}
+                                                {{ post.clientAdress }}
+                                            {% else %}
+                                                Адрес не введен
+                                            {% endif %}
+                                        </small></p>
+                                        <p class="mb-0 myTicketTable__desct">
+                                            {% if post.body %}
+                                                {{ post.body }}
+                                            {% else %}
+                                                Описания нет
+                                            {% endif %}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        {% if post.master %}
+                                            <span href="#" style="font-size: 11px;">{{ post.master }}</span>
+                                        {% else %}
+                                            <span style="font-size: 11px;">Не назначен</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-default">{{ post.status }}</span>
+                                    </td>
+                                    <td>
+                                        <strong>{{ post.fullprice }} Р</strong>
+                                        <div class="font-10">За выезд: {{ post.price }} Р</div>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if isAdmin %}
+                                        <a href="{% url 'ticket_edit' pk=post.id %}" class="btn btn-sm btn-primary">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        {% else %}
+                                        <a href="{% url 'ticket_view' pk=post.id %}" class="btn btn-sm btn-info">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        {% endif %}
+                                        <a href="{% url 'ticket_close' pk=post.id %}" class="btn btn-sm btn btn-success ml-2">
+                                            <i class="fa fa-check"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+            
+                </div>
+            </div>
+            <!-- ==== Конец Свежие заявки ==== -->
+
+
+
+
+
+
+        </div>
+    </div>
+
+{% endblock %}

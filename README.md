@@ -1,2 +1,3 @@
 # fixit
-Fixit CRM n2
+Fixit CRM
+Made on Django 2.0.13

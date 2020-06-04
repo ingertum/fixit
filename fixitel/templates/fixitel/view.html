@@ -1,0 +1,200 @@
+{% extends  'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <div id="main-content">
+        <div class="container-fluid">
+
+            <div class="block-header">
+                <div class="row clearfix">
+                    <div class="col-md-6 col-sm-12">
+                        <h1>{{ pagetitle }}</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'ticket_list' %}">Заявки</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ pagetitle }}</li>
+                            </ol>
+                        </nav>
+                    </div>            
+                    <div class="col-md-6 col-sm-12 text-right mt-3 mt-md-0">
+
+                        {% if ticket.status.is_archive %}
+                        <a href="{% url 'ticket_list' %}" class="btn btn-sm btn-secondary mb-1">
+                            <i class="fa fa-mail-reply mr-1"></i>
+                            <span>Назад</span>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'ticket_archive' %}" class="btn btn-sm btn-secondary mb-1">
+                            <i class="fa fa-mail-reply mr-1"></i>
+                            <span>Назад</span>
+                        </a>
+                        {% endif %}
+                        {% if isAdmin %}
+                        <a href="{% url 'ticket_edit' pk=id %}" class="btn btn-sm btn-secondary mb-1">
+                            <i class="fa fa-pencil mr-1"></i>
+                            <span>Редактировать</span>
+                        </a>
+                        {% endif %}
+                        {% if isAdmin %}
+                        <a href="{% url 'delete_ticket' pk=id %}" class="btn btn-sm btn-danger mb-1">
+                            <i class="fa fa-times mr-1"></i>
+                            <span>Удалить</span>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert {{ message.tags }}"{% endif %} role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+
+
+            <style>
+                .myRightSide textarea{
+                    height: 175px;
+                }
+            </style>
+            <div class="row align-items-stretch">
+                <div class="col-md-12 col-lg-6 card">
+                    <div class="body" style="height: 100%;">
+
+                        <div class="mb-4">
+                            <h3>{{ ticket.title }}</h3>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="font-18">Ф.И.О клиента</h5>
+                            <p>
+                                {% if ticket.clientName %}
+                                    {{ ticket.clientName }}
+                                {% else %}
+                                    Не введено
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="font-18">Адрес клиента</h5>
+                            <p>
+                                {% if ticket.clientAdress %}
+                                    {{ ticket.clientAdress }}
+                                {% else %}
+                                    Адрес не введен
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="font-18">Номер телефона клиента</h5>
+                            <p>
+                                {% if ticket.clientPhone %}
+                                    {{ ticket.clientPhone }}
+                                {% else %}
+                                    Номер не введен
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="font-18">Назначенный мастер</h5>
+                            {% if ticket.master %}
+                                <p>{{ ticket.master }}</p>
+                            {% else %}
+                                <p>Не назначен</p>
+                            {% endif %}
+                        </div>
+                        <div class="mb-4">
+                            <h5 class="font-18">Выплата за выезд (Р)</h5>
+                            <p>
+                                {% if ticket.price %}
+                                    {{ ticket.price }} Р.
+                                {% else %}
+                                    Не установлено
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5 class="font-18">Стоимость комплектующих (Р)</h5>
+                            <p>
+                                {% if ticket.priceDetails %}
+                                    {{ ticket.priceDetails }} Р.
+                                {% else %}
+                                    Не установлено
+                                {% endif %}
+                            </p>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6 card myRightSide">
+                    <div class="body" style="height: 100%;">
+                        <div class="mb-4">
+                            <h5 class="font-18">Дата создания</h5>
+                            <p>{{ ticket.created }}</p>
+                            <h5 class="font-18">Последнее обновление</h5>
+                            <p>{{ ticket.updated }}</p>
+                        </div>
+                        <div class="mb-4">
+                            <h5 class="font-18">Описание проблемы</h5>
+                            <p>
+                                {% if ticket.body %}
+                                    {{ ticket.body }}
+                                {% else %}
+                                    Не заполнено
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <h5 class="font-18">Стоимость работ (Р)</h5>
+                            <p>
+                                {% if ticket.fullprice %}
+                                    {{ ticket.fullprice }} Р.
+                                {% else %}
+                                    Не установлено
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <form method="POST" class="" action="/editsimple/{{ ticket.id }}">{% csrf_token %}
+                            {% for field in ticketForm %}
+                                <div class="form-group mb-4">
+                                    <h5 class="control-label">
+                                        {{ field.label }}
+                                    </h5>
+                                    {% render_field field placeholder=field.label class="form-control" %}
+                                    {{ field.errors }}
+                                </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-lg btn-success pr-4">
+                                <i class="fa fa-check mr-1"></i>
+                                <span>Сохранить</span>
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            {% include 'fixitel/inc/comments.html' with needForm=True %}
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+{% endblock %}

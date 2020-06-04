@@ -1,0 +1,62 @@
+{% extends  'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <div id="main-content">
+        <div class="container-fluid">
+
+            <div class="block-header">
+                <div class="row clearfix">
+                    <div class="col-md-6 col-sm-12">
+                        <h1>{{ pagetitle }}</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'main' %}">Панель Управления</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ pagetitle }}</li>
+                            </ol>
+                        </nav>
+                    </div>            
+                    <div class="col-md-6 col-sm-12 text-right mt-3 mt-md-0">
+                        <a href="{% url 'ticket_list' %}" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-mail-reply mr-1"></i>
+                            <span>Назад</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert {{ message.tags }}"{% endif %} role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+
+
+            <div class="card d-block" style="max-width: 400px;">
+                <div class="body">
+                    <h4 class="card-title">Вы уверены?</h4>
+                    <div class="card-subtitle">Вы уверены что хотите удалить комментарий?</div>
+                    <form method="post" class="mt-4">{% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger mr-1">
+                            <i class="fa fa-times mr-1"></i>
+                            <span>Удалить комментарий</span>
+                        </button>
+                        <a href="{% url 'ticket_view' pk=object.Ticket.id %}#commentBlock" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-mail-reply mr-1"></i>
+                            <span>Назад</span>
+                        </a>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+{% endblock %}

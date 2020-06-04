@@ -1,0 +1,103 @@
+{% extends  'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <div id="main-content">
+        <div class="container-fluid">
+
+            <div class="block-header">
+                <div class="row clearfix">
+                    <div class="col-md-6 col-sm-12">
+                        <h1>{{ pagetitle }}</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'main' %}">Панель Управления</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ pagetitle }}</li>
+                            </ol>
+                        </nav>
+                    </div>            
+                    <div class="col-md-6 col-sm-12 text-right mt-3 mt-md-0">
+                        {% if ticket.status.is_archive %}
+                        <a href="{% url 'ticket_list' %}" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-mail-reply mr-1"></i>
+                            <span>Назад</span>
+                        </a>
+                        {% else %}
+                        <a href="{% url 'ticket_archive' %}" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-mail-reply mr-1"></i>
+                            <span>Назад</span>
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'delete_ticket' pk=id %}" class="btn btn-sm btn-danger">
+                            <i class="fa fa-times mr-1"></i>
+                            <span>Удалить заявку</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert {{ message.tags }}"{% endif %} role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+
+
+            <style>
+                .myRightSide textarea{
+                    height: 175px;
+                }
+            </style>
+            <form method="POST" class="row align-items-stretch">{% csrf_token %}
+                <div class="col-md-12 col-lg-6 card">
+                    <div class="body" style="height: 100%;">
+                        {% for field in form %}
+                        {% if field.id_for_label in "id_body,id_master, id_status"  %}
+                        {% else %}
+                            <div class="form-group mb-4">
+                                <label for="{{ field.id_for_label }}" class="control-label">
+                                    <b>{{ field.label }}</b>
+                                </label>
+                                {% render_field field placeholder=field.label class="form-control" %}
+                                {{ field.errors }}
+                            </div>
+                        {% endif %}
+
+                        {% endfor %}
+                        <div class="d-flex justify-content-end pt-3">
+                            <button type="submit" class="btn btn-lg btn-success pr-4">
+                                <i class="fa fa-check mr-1"></i>
+                                <span>Сохранить</span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6 card myRightSide">
+                    <div class="body" style="height: 100%;">
+                        {% for field in form %}
+                            {% if field.id_for_label in "id_body,id_master, id_status" %}
+                                <div class="form-group mb-4">
+                                    <label for="{{ field.id_for_label }}" class="control-label">
+                                        <b>{{ field.label }}</b>
+                                    </label>
+                                    {% render_field field placeholder=field.label class="form-control" %}
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </form>
+
+
+            {% if id %}
+            {% include 'fixitel/inc/comments.html' with needForm=True %}
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

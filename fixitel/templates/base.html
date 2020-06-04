@@ -1,0 +1,89 @@
+{% load static %}
+{% load widget_tweaks %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <link rel="icon" type="image/png" href="{% static 'assets/images/mastercard.png' %}" />
+
+    <!-- VENDOR CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/vendor/animate-css/vivify.min.css' %}">
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="{% static 'assets/css/site.min.css' %}">
+    <link rel="stylesheet" href="{% static 'fixitel/custom.css' %}">
+</head>
+
+<body class="theme-red font-montserrat light_version">
+    <style>
+        .rightmasterbuttons a{
+            margin-bottom: 10px;
+        }
+        .myTicketTable{
+            min-width: 963px;
+        }
+        .myTicketTable tr td{
+            max-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .myTicketTable__desct{
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .errorlist{
+            font-size: 11px;
+            padding-left: 15px;
+            padding-top: 4px;
+            color: red;
+        }
+    </style>
+    <!-- Page Loader -->
+    <div style="display: none !important;">
+        <div id="particles-js"></div>
+            <div class="particles-js-canvas-el"></div>
+        </div>
+    </div>
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+            <div class="bar4"></div>
+            <div class="bar5"></div>
+        </div>
+    </div>
+
+
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+
+    <div id="wrapper">
+
+        {% include 'fixitel/inc/navbar.html' %}
+
+    </div>
+
+
+    
+    {% block content %}{% endblock %}
+
+    <script src="{% static 'assets/bundles/libscripts.bundle.js' %}"></script>
+    <script src="{% static 'assets/bundles/vendorscripts.bundle.js' %}"></script>
+    <script src="{% static 'assets/bundles/mainscripts.bundle.js' %}"></script>
+
+    <script src="{% static 'assets/bundles/datatablescripts.bundle.js' %}"></script>
+    <script src="{% static 'fixitel/custom.js' %}"></script>
+    <script>
+
+    </script>
+</body>
+
+</html>

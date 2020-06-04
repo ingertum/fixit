@@ -1,0 +1,141 @@
+{% extends  'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <div id="main-content">
+        <div class="container-fluid">
+
+            <div class="block-header">
+                <div class="row clearfix">
+                    <div class="col-md-6 col-sm-12">
+                        <h1>{{ pagetitle }}</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'main' %}">Панель управления</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ pagetitle }}</li>
+                            </ol>
+                        </nav>
+                    </div>            
+                    <div class="col-md-6 col-sm-12 text-right mt-3 mt-md-0">
+                        <a href="{% url 'main' %}" class="btn btn-sm btn-secondary">
+                            <i class="fa fa-mail-reply mr-1"></i>
+                            <span>Назад</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            {% if messages %}
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert {{ message.tags }}"{% endif %} role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+
+
+            <div class="card text-center">
+                <div class="body d-block d-md-inline-block">
+                    <div class="d-flex align-items-center justify-content-center" style="min-width: 280px;">
+                        <div class="mx-4">
+                            <a href="{% url 'score_minus' %}" class="btn btn-danger btn-block btn-round">Добавить Расход</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="body d-block d-md-inline-block text-left p-3 p-lg-5 mx-0 mx-md-4">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div class="icon-in-bg bg-indigo text-white rounded-circle"><i class="fa fa-briefcase"></i></div>
+                        <div class="ml-4">
+                            <span>Счёт компании</span>
+                            <h4 class="mb-0 font-weight-medium">{{ total_money | default:"0"}} Р</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="body d-block d-md-inline-block">
+                    <div class="d-flex align-items-center justify-content-center" style="min-width: 280px;">
+                        <div class="mx-auto">
+                            <a href="{% url 'score_plus' %}" class="btn btn-success btn-block btn-round">Добавить доход</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h4 mt-3">Список операций</div>
+
+            <div class="table-responsive invoice_list">
+                <table class="table table-hover table-custom spacing8">
+                    <thead>
+                        <tr> 
+                            <th style="width: 200px;">Дата транзакции</th>
+                            <th>Вид транзакции</th>
+                            <th style="width: 300px;">Сумма</th>
+                            <th style="width: 200px">Средства</th>
+                            <!-- <th style="width: 100px;">Действия</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transact in transList %}
+                        {% if transact.total >= 0 %}
+                        <tr>
+                            <td class="bg-success text-white">
+                                <span>{{ transact.created }}</span>
+                            </td>
+                            <td class="bg-success text-white">
+                                <div class="h5 mb-1">Доход <small>({{ transact.transact_type }})</small></div>
+                                <div>
+                                    <span class="mr-4"><i class="icon-bubbles mr-1"></i> {{ transact.name|default:"Нет описания" }}</span>
+                                </div>
+
+                            </td>
+                            <td class="bg-success text-white">
+                                <div class="h4 mb-0">+ {{ transact.total }} Р</div>
+                            </td>
+                            <td class="bg-success text-white">
+                                <div><small>После: {{ transact.after }} р.</small></div>
+                                <div><small>До: {{ transact.before }} р.</small></div>
+                            </td>
+                            <!-- <td class="bg-success text-white">
+                                <a href="#" type="button" class="btn btn-sm btn-default" title="" data-toggle="tooltip" data-placement="top" data-original-title="Отменить транзакцию"><i class="icon-reload"></i></a>
+                            </td> -->
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td class="bg-danger text-white">
+                                <span>{{ transact.created }}</span>
+                            </td>
+                            <td class="bg-danger text-white">
+                                <div class="h5 mb-1">Расход <small>({{ transact.transact_type }})</small></div>
+                                <div>
+                                    <span class="mr-4"><i class="icon-bubbles mr-1"></i>
+                                        {{ transact.name|default:"Нет описания" }}
+                                    </span>
+                                </div>
+
+                            </td>
+                            <td class="bg-danger text-white">
+                                <div class="h4 mb-0">{{ transact.total }} Р</div>
+                            </td>
+                            <td class="bg-danger text-white">
+                                <div><small>После: {{ transact.after }} р.</small></div>
+                                <div><small>До: {{ transact.before }} р.</small></div>
+                            </td>
+                            <!-- <td class="bg-danger text-white">
+                                <a href="#" type="button" class="btn btn-sm btn-default" title="" data-toggle="tooltip" data-placement="top" data-original-title="Отменить транзакцию"><i class="icon-reload"></i></a>
+                            </td> -->
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+
+
+        </div>
+    </div>
+
+{% endblock %}
